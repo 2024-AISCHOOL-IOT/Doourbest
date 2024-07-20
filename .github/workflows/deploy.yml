@@ -1,0 +1,17 @@
+# .github/workflows/deploy.yml
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Pull latest changes
+        run: |
+          cd /home/wasadm/flask
+          git pull origin master
