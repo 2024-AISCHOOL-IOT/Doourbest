@@ -1,12 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[5]:
-
-
-#!/usr/bin/env python
-# coding: utf-8
-
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -18,10 +9,22 @@ from IPython.display import display
 
 chrome_driver_path = './ChromeDriver/chromedriver.exe'
 
-def fetch_nba_data(base_url):
-    num_periods = input("'ALL', 1, 2, 3, 4, '1stHalf', '2ndHalf' 중 하나를 입력해주세요: ")
-    if num_periods not in ['1', '2', '3', '4', 'ALL', '1stHalf', '2ndHalf']:
-        num_periods = 'ALL'
+def fetch_nba_data(base_url, param=None):
+    '''default value : param = 'ALL'
+    base_url = 조회하려는 url,
+    param = 조회하려는 쿼터
+    '''
+    Q_param = ['Q1', 'Q2', 'Q3', 'Q4', 'ALL', '1stHalf', '2ndHalf']
+    if param is None:
+        param = 'ALL'
+    elif isinstance(param,int):
+        if param > 4 or param < 1:
+            param = 'ALL'
+    elif param not in Q_param:
+        param = 'ALL'
+    else:
+        pass
+
     
     # ChromeDriver 설정
     service = Service(chrome_driver_path)
@@ -30,7 +33,7 @@ def fetch_nba_data(base_url):
     df_dict = {}
     
     # URL 접속
-    url = f'{base_url}?period=Q{num_periods}' if num_periods in ['1', '2', '3', '4'] else base_url
+    url = f'{base_url}?period={param}'
     driver.get(url)
     
     # 페이지 로드 대기
@@ -78,20 +81,15 @@ def fetch_nba_data(base_url):
         period_tables.append((team1 if idx == 0 else team2, period_table_df))
     
     # 결과 출력 (Jupyter Notebook에서 보기 쉽게)
-    print(f"DataFrames for Q{num_periods}:")
-    for team_name, df in period_tables:
-        print(f"Team: {team_name}")
-        display(df)
+    # print(f"DataFrames for {param}:")
+    # for team_name, df in period_tables:
+    #     print(f"Team: {team_name}")
+    #     display(df)
     
     # 각 쿼터의 테이블을 딕셔너리에 저장
-    df_dict[num_periods] = period_tables
+    print(f'조회한 쿼터는 {param}입니다')
     
     driver.quit()
-    return df_dict
+    return period_tables
 
-# 함수 호출 예시
-# chrome_driver_path = 'C:/Users/USER/Downloads/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
-# base_url = 'https://www.nba.com/game/gsw-vs-mia-1322200005/box-score'
-
-# nba_data = fetch_nba_data(base_url)
 
