@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+    <link rel="stylesheet" href="../static/css/prediction_global.css" />
+    <link rel="stylesheet" href="../static/css/prediction_index.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto Sans KR:wght@400&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"
+    />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 서버에서 팀 목록을 가져와서 드롭다운 메뉴를 동적으로 생성
+            $.ajax({
+                url: "/teams",
+                method: "GET",
+                success: function(response) {
+                    var teams = response;
+                    var options = '';
+                    for (var i = 0; i < teams.length; i++) {
+                        options += '<option value="' + teams[i] + '">' + teams[i] + '</option>';
+                    }
+                    $('#homeTeam').html(options);
+                    $('#awayTeam').html(options);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            });
+
+            $('#predictButton').click(function() {
+                var homeTeam = $('#homeTeam').val();
+                var awayTeam = $('#awayTeam').val();
+
+                var inputData = {
+                    'home_team': homeTeam,
+                    'away_team': awayTeam
+                };
+
+                $.ajax({
+                    url: "/prediction/future_games/competition",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(inputData),
+                    success: function(response) {
+                        // 서버로부터 받은 데이터를 HTML에 표시
+                        $('#result').html(`<strong>Prediction Result:</strong> ${response.result}`);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                        $('#result').text('Failed to load prediction');
+                    }
+                });
+            });
+        });
+    </script>
+  </head>
+  <body>
+    <div class="slide-169-6">
+      <img class="icon" alt="" src="../static/img/46352221-1@2x.png" />
+
+      <section class="teams-parent">
+        <div class="teams">
+          <div class="home-team-container">
+            <div class="rectangle-parent">
+              <div class="frame-child"></div>
+              <div class="div">(팀 로고1)</div>
+            </div>
+          </div>
+          <div class="vector-parent">
+            <img class="frame-item" alt="" src="../static/img/rectangle-2245.svg" />
+
+            <img
+              class="frame-inner"
+              loading="lazy"
+              alt=""
+              src="../static/img/group-7851@2x.png"
+            />
+
+            <div class="team-names">
+              <b class="b">홈 팀</b>
+            </div>
+          </div>
+        </div>
+        <div class="teams1">
+          <div class="teams-inner">
+            <div class="rectangle-group">
+              <div class="rectangle-div"></div>
+              <div class="div1">(팀 로고2)</div>
+            </div>
+          </div>
+          <div class="vector-group">
+            <img
+              class="rectangle-icon"
+              alt=""
+              src="../static/img/rectangle-2245.svg"
+            />
+
+            <img
+              class="group-icon"
+              loading="lazy"
+              alt=""
+              src="../static/img/group-7851@2x.png"
+            />
+
+            <div class="wrapper">
+              <b class="b1">어웨이 팀</b>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="slide-169-6-inner">
+        <div class="vector-container">
+          <img class="frame-child1" alt="" src="../static/img/rectangle-2245.svg" />
+
+          <img
+            class="frame-child2"
+            loading="lazy"
+            alt=""
+            src="../static/img/group-7851@2x.png"
+          />
+
+          <div class="container">
+            <b class="b2">예측</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
