@@ -3,7 +3,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-def set_paging(row=5,col=None):
+def set_paging(row=5,col=5):
     """default value
     row=5
     col=None
@@ -34,7 +34,7 @@ grouped_summary = games_details.groupby(['GAME_ID', 'TEAM_ID']).agg({
     'FG3A': 'sum',
     'FTM': 'sum',
     'FTA': 'sum',
-    'FT_PCT': 'sum',
+    'FT_PCT': 'mean',
     'OREB': 'sum',
     'DREB': 'sum',
     'REB': 'sum',

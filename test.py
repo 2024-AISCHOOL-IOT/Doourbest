@@ -31,6 +31,9 @@ df2 = pd.DataFrame(data2)
 pre1 = predict.pre_knn(df1.subtract(df2.values))
 #DecisionTree 모델 기반 home팀기준 away팀과의 박스스코어 차이를 기준으로 홈팀의 승리 예측
 pre2 = predict.pre_tree(df1.subtract(df2.values))
+#RandomForest 모델 기반 home팀기준 away팀과의 박스스코어 차이를 기준으로 홈팀의 승리 예측
+pre3 = predict.pre_rf(df1.subtract(df2.values))
 
 print(pre1)
 print(pre2)
+print(pre3)
