@@ -1,11 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <title>Team Ranking</title>
+
+    <!-- 외부 CSS 파일 링크 -->
+    <link rel="stylesheet" href="../static/css/magu_global.css" />
+    <link rel="stylesheet" href="../static/css/magu_index.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" />
+
+    <!-- jQuery 라이브러리 추가 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4; /* 배경색 추가 */
+        }
+
+        .slide-169-9 {
+            margin: 20px;
+            text-align: center;
+            position: relative; /* 제목 위치를 조정할 수 있도록 설정 */
+        }
+
+        .slide-169-9-inner .wrapper {
+            display: inline-block;
+            width: 100%;
+            max-width: 1300px; /* 크기 조정 */
+            margin: 0 auto;
+            background-color: #fff; /* 농구공 색상 */
+            padding: 20px;
+            border-radius: 8px; /* 둥근 모서리 */
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 0 auto;
+            width: calc(100% - 40px); /* wrapper보다 약간 작게 조정 */
+            background-color: #e0e0e0; /* 테이블 배경색 */
+            border-radius: 8px; /* 둥근 모서리 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .table th, .table td {
+            border: 1px solid #ddd; /* 회색 테두리 */
+            padding: 12px; /* 패딩 추가 */
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f9f9f9; /* 헤더 배경색 */
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9; /* 홀수 행 배경색 */
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1; /* 호버 시 배경색 */
+        }
+
+        .sortable {
+            cursor: pointer;
+        }
+
+        .sortable:hover {
+            text-decoration: underline; /* 정렬 가능한 헤더에 마우스를 올렸을 때 밑줄 표시 */
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+        }
+        .vector-group:hover,
+        .vector-parent:hover {
+            background-color: lightgray;
+        }
+        .navigation .vector-parent, .navigation .vector-group {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .navigation img {
+            margin-right: 8px;
+        }
+
+        .page-link, .container {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* 제목 스타일 */
+        .title {
+            font-size: 48px; /* 큰 제목 크기 */
+            font-weight: bold;
+            margin-bottom: 20px; /* 제목과 테이블 사이의 공간 */
+            position: absolute; /* 절대 위치 */
+            top: 80px; /* 페이지 상단에서 200px 떨어진 위치 */
+            left: 50.5%; /* 가운데 정렬을 위해 */
+            transform: translateX(-50%); /* 가운데 정렬 조정 */
+            color: #333; /* 제목 색상 */
+            z-index: 1000;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            let currentSortColumn = ''; // 현재 정렬된 컬럼
+
+            // 정렬 가능한 컬럼 목록
+            const sortableColumns = ['GP', 'W', 'L', 'W_PCT', 'MIN', 'FGM', 'FGA', 
+                                     'FG_PCT', 'FG3M', 'FG3A', 'FG3_PCT', 'FTM', 
+                                     'FTA', 'FT_PCT', 'OREB', 'DREB', 'REB', 
+                                     'AST', 'TOV', 'STL', 'BLK', 'BLKA', 'PF', 
+                                     'PFD', 'PTS', 'PLUS_MINUS'];
+
+            function loadTableData(sortColumn) {
+                $.ajax({
+                    url: sortColumn ? `/api/team_ranking/sort?column=${sortColumn}` : "/api/team_ranking",
+                    method: "GET",
+                    success: function(data) {
+                        var tableHead = $('#team-ranking-table thead');
+                        var tableBody = $('#team-ranking-table tbody');
+                        tableHead.empty(); // 기존 테이블 헤더 내용 제거
+                        tableBody.empty(); // 기존 테이블 내용 제거
+
+                        // 데이터로부터 테이블 헤더 생성
+                        var headers = data.columns;
+                        var headerRow = '<tr>';
+                        headers.forEach(function(header) {
+                            if (sortableColumns.includes(header)) {
+                                // 정렬 가능한 컬럼만 클릭 가능하게 설정
+                                headerRow += `<th class="sortable" data-column="${header}">${header}</th>`;
+                            } else {
+                                headerRow += `<th>${header}</th>`;
+                            }
+                        });
+                        headerRow += '</tr>';
+                        tableHead.append(headerRow);
+
+                        // 데이터로부터 테이블 행 생성
+                        data.data.forEach(function(row) {
+                            var tableRow = '<tr>';
+                            headers.forEach(function(header) {
+                                tableRow += `<td>${row[header]}</td>`;
+                            });
+                            tableRow += '</tr>';
+                            tableBody.append(tableRow);
+                        });
+
+                        // 클릭 이벤트 리스너 추가
+                        $('.sortable').click(function() {
+                            var column = $(this).data('column');
+                            if (column === currentSortColumn) {
+                                currentSortColumn = ''; // 현재 정렬된 컬럼이 클릭되면 정렬 해제
+                            } else {
+                                currentSortColumn = column; // 컬럼을 새로 정렬 기준으로 설정
+                            }
+                            loadTableData(currentSortColumn); // 데이터 로드
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error loading data:", error);
+                    }
+                });
+            }
+
+            // 페이지가 로드될 때 테이블 데이터를 로드
+            loadTableData();
+
+            // 5초마다 테이블 데이터를 갱신
+
+        });
+    </script>
 </head>
 <body>
-    <br><input type="button" value="홈" onclick="window.location.href='/'">
+     <!-- 제목 추가 -->
+    <h1 class="title">팀 순위</h1>
+    <div class="slide-169-9">
+       
+        
+        
+        <div class="slide-169-9-inner">
+            <div class="wrapper">
+                <div class="table-container">
+                    <table id="team-ranking-table" class="table">
+                        <thead>
+                            <!-- 테이블 헤더가 동적으로 생성됩니다 -->
+                        </thead>
+                        <tbody>
+                            <!-- 데이터가 동적으로 여기에 삽입됩니다 -->
+                        </tbody>
+                    </table>
+                </div>   
+            </div>
+        </div>
+
+        <div class="navigation">
+            <div class="vector-parent" onclick="window.location.href='/'">
+                <img class="frame-child" alt="" src="../static/img/rectangle-2245.svg" />
+                <img class="frame-item" loading="lazy" alt="" src="../static/img/group-7851@2x.png" />
+                <div class="page-link">
+                    <b class="b">메인 화면</b>
+                </div>
+            </div>
+
+            <div class="vector-group" onclick="window.location.href='../information'">
+                <img class="frame-inner" alt="" src="../static/img/rectangle-2245.svg" />
+                <img class="group-icon" loading="lazy" alt="" src="../static/img/group-7851@2x.png" />
+                <div class="container">
+                    <b class="b1">이전 페이지</b>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

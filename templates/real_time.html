@@ -1,11 +1,636 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <br><input type="button" value="홈" onclick="window.location.href='/'">
-</body>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+    <link rel="stylesheet" href="../static/css/boxscores_global.css" />
+    <link rel="stylesheet" href="../static/css/boxscores_index.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+    />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        function loadTableData() {
+          $.ajax({
+            url: "/api/game_schedule",
+            method: "GET",
+            success: function(data) {
+              var tableHead = $('#game-schedule-table thead');
+              var tableBody = $('#game-schedule-table tbody');
+              tableHead.empty(); // 기존 테이블 헤더 내용 제거
+              tableBody.empty(); // 기존 테이블 내용 제거
+
+              // 데이터로부터 테이블 헤더 생성
+              var headers = ['Matchup'];
+              var headerRow = '<tr>';
+              headers.forEach(function(header) {
+                headerRow += '<th>' + header + '</th>';
+              });
+              headerRow += '</tr>';
+              tableHead.append(headerRow);
+
+              // 데이터로부터 테이블 행 생성
+              data.data.forEach(function(row) {
+                var tableRow = '<tr>';
+                tableRow += '<td class="matchup-cell" data-home="' + row['homeTeam'] + '" data-away="' + row['awayTeam'] + '">' + row['homeTeam'] + ' vs ' + row['awayTeam'] + '</td>';
+                tableRow += '</tr>';
+                tableBody.append(tableRow);
+              });
+            },
+            error: function(xhr, status, error) {
+              console.error("Error loading data:", error);
+            }
+          });
+        }
+        
+        // 경기 클릭 이벤트 추가
+        $(document).on("click",'td.matchup-cell',function() {
+          var homeTeam = $(this).data('home');
+          var awayTeam = $(this).data('away');
+          fetchrealtimeresult(homeTeam, awayTeam);
+        });
+
+        function fetchrealtimeresult(homeTeam, awayTeam) {
+          $.ajax({
+            url: "/api/prediction/real_time",
+            method: "GET",
+            data: { home_team: encodeURIComponent(homeTeam),
+              away_team: encodeURIComponent(awayTeam) },
+            success: function(data) {
+              // 홈팀 데이터 삽입
+              data.result_home.forEach(function(row) {
+                var home_table1_tag ="<thead>"
+                        +  "<tr>"
+                        +    "<th>FGM</th>"
+                        +    "<th>FGA</th>"
+                        +    "<th>FG%</th>"
+                        +    "<th>3PM</th>"
+                        +    "<th>3PA</th>"
+                        +    "<th>3P%</th>"
+                        +  "</tr>"
+                        +"</thead>"
+                        +"<tbody>"
+                        +  "<tr>"
+                        +    "<td>"+row["FGM"] +"</td>"
+                        +    "<td>"+row["FGA"] +"</td>"
+                        +    "<td>"+row["FG%"] +"</td>"
+                        +    "<td>"+row["3PM"] +"</td>"
+                        +    "<td>"+row["3PA"] +"</td>"
+                        +    "<td>"+row["3P%"] +"</td>"
+                        +  "</tr>"
+                        +"</tbody>";
+                var home_table2_tag ="<thead>"
+                        +  "<tr>"
+                        +    "<th>FTM</th>"
+                        +    "<th>FTA</th>"
+                        +    "<th>FT%</th>"
+                        +    "<th>OREB</th>"
+                        +    "<th>DREB</th>"
+                        +    "<th>REB</th>"
+                        +  "</tr>"
+                        +"</thead>"
+                        +"<tbody>"
+                        +  "<tr>"
+                        +    "<td>"+row["FTM"] +"</td>"
+                        +    "<td>"+row["FTA"] +"</td>"
+                        +    "<td>"+row["FT%"] +"</td>"
+                        +    "<td>"+row["OREB"] +"</td>"
+                        +    "<td>"+row["DREB"] +"</td>"
+                        +    "<td>"+row["REB"] +"</td>"
+                        +  "</tr>"
+                        +"</tbody>";
+                var home_table3_tag ="<thead>"
+                        +  "<tr>"
+                        +    "<th>AST</th>"
+                        +    "<th>STL</th>"
+                        +    "<th>BLK</th>"
+                        +    "<th>TO</th>"
+                        +    "<th>PF</th>"
+                        +    "<th>PTS</th>"
+                        +  "</tr>"
+                        +"</thead>"
+                        +"<tbody>"
+                        +  "<tr>"
+                        +    "<td>"+row['AST'] +"</td>"
+                        +    "<td>"+row['STL'] +"</td>"
+                        +    "<td>"+row['BLK'] +"</td>"
+                        +    "<td>"+row['TO'] +"</td>"
+                        +    "<td>"+row['PF'] +"</td>"
+                        +    "<td>"+row['PTS'] +"</td>"
+                        +  "</tr>"
+                        +"</tbody>";
+
+                // hometableheaders.forEach(function(header) {
+                //   hometableRow += '<td>' + row[header] + '</td>';
+                // });
+                // hometableRow += '</tr>';
+                // hometableBody.append(hometableRow);
+                $("#home-table1").html(home_table1_tag)
+                $("#home-table2").html(home_table2_tag)
+                $("#home-table3").html(home_table3_tag)
+              });
+
+              // 원정팀 데이터 삽입
+              data.result_away.forEach(function(row) {
+                var away_table1_tag ="<thead>"
+                        +  "<tr>"
+                        +    "<th>FGM</th>"
+                        +    "<th>FGA</th>"
+                        +    "<th>FG%</th>"
+                        +    "<th>3PM</th>"
+                        +    "<th>3PA</th>"
+                        +    "<th>3P%</th>"
+                        +  "</tr>"
+                        +"</thead>"
+                        +"<tbody>"
+                        +  "<tr>"
+                        +    "<td>"+row["FGM"] +"</td>"
+                        +    "<td>"+row["FGA"] +"</td>"
+                        +    "<td>"+row["FG%"] +"</td>"
+                        +    "<td>"+row["3PM"] +"</td>"
+                        +    "<td>"+row["3PA"] +"</td>"
+                        +    "<td>"+row["3P%"] +"</td>"
+                        +  "</tr>"
+                        +"</tbody>";
+                var away_table2_tag ="<thead>"
+                        +  "<tr>"
+                        +    "<th>FTM</th>"
+                        +    "<th>FTA</th>"
+                        +    "<th>FT%</th>"
+                        +    "<th>OREB</th>"
+                        +    "<th>DREB</th>"
+                        +    "<th>REB</th>"
+                        +  "</tr>"
+                        +"</thead>"
+                        +"<tbody>"
+                        +  "<tr>"
+                        +    "<td>"+row["FTM"] +"</td>"
+                        +    "<td>"+row["FTA"] +"</td>"
+                        +    "<td>"+row["FT%"] +"</td>"
+                        +    "<td>"+row["OREB"] +"</td>"
+                        +    "<td>"+row["DREB"] +"</td>"
+                        +    "<td>"+row["REB"] +"</td>"
+                        +  "</tr>"
+                        +"</tbody>";
+                var away_table3_tag ="<thead>"
+                        +  "<tr>"
+                        +    "<th>AST</th>"
+                        +    "<th>STL</th>"
+                        +    "<th>BLK</th>"
+                        +    "<th>TO</th>"
+                        +    "<th>PF</th>"
+                        +    "<th>PTS</th>"
+                        +  "</tr>"
+                        +"</thead>"
+                        +"<tbody>"
+                        +  "<tr>"
+                        +    "<td>"+row['AST'] +"</td>"
+                        +    "<td>"+row['STL'] +"</td>"
+                        +    "<td>"+row['BLK'] +"</td>"
+                        +    "<td>"+row['TO'] +"</td>"
+                        +    "<td>"+row['PF'] +"</td>"
+                        +    "<td>"+row['PTS'] +"</td>"
+                        +  "</tr>"
+                        +"</tbody>";
+                $("#away-table1").html(away_table1_tag)
+                $("#away-table2").html(away_table2_tag)
+                $("#away-table3").html(away_table3_tag)
+              });
+              // #check
+              for (i in data){
+                if (i.indexOf('model') > -1){
+                  console.log(data[i],typeof data[i])
+                  $("."+i).text(data[i] == "1" ? "H" : "A")
+                }
+              }
+            },
+            error: function(xhr, status, error) {
+              console.error("Error fetching match result:", error);
+            }
+          });
+        }
+
+        // 페이지가 로드될 때 테이블 데이터를 로드
+        loadTableData();
+      });
+    </script>
+    <style>
+      .frame td, 
+      .frame tr,
+      .wrapper1 td,
+      .wrapper1 tr {
+        font-size: 20px;
+      }
+      #home-table1,
+      #home-table2,
+      #home-table3,
+      #away-table1,
+      #away-table2,
+      #away-table3 {
+        background-color: #ffffff;
+      }
+      .table {
+        width: 100%;
+        border-top: 1px solid #444444;
+        border-collapse: collapse;
+        /* margin-bottom: 20px; 테이블과 다른 요소 사이에 여백 추가 */
+        font-size: 16px; /* 테이블 글씨 크기 조절 가능 부분 */
+        text-align: center;
+      }
+      .table th, .table td {
+        border: 1px solid #ffffff;
+        padding: 6px 10px; /* 패딩을 늘려 행 간격 조절 */
+        text-align: center;
+        font-size: 18px;
+        border-bottom: 1px solid #444444;
+      }
+
+      .table th {
+        background-color: #ffffff;
+      }
+
+      .table tbody tr:nth-child(odd) {
+        background-color: #d4d4d4;
+      }
+
+      .table tbody tr:nth-child(even) {
+        background-color: #ffffff;
+      }
+      .vector-parent,
+      .vector-group {
+        cursor: pointer; /* 클릭 가능한 느낌을 주기 위해 커서 모양 변경 */
+        padding: 20px;
+        background-color: white;
+        text-align: center;
+      }
+
+      .vector-parent:hover,
+      .vector-group:hover {
+        background-color: lightgray; /* 마우스 오버 시 배경색 변경 */
+      }
+      .matchup-cell:hover {
+        cursor: pointer;
+      }
+
+      #home-table1,#home-table2,#home-table3,
+      #away-table1,
+      #away-table2,
+      #away-table3 {
+        width: 100%; /* Ensures the table takes up the full width of its container */
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        font-size: 16px;
+        text-align: center;
+      }
+
+      #home-table1 th,#home-table2 th,#home-table3 th, #home-table1 td,#home-table2 td,#home-table3 td,
+      #away-table1 th,
+      #away-table2 th,
+      #away-table3 th,
+      #away-table1 td,
+      #away-table2 td,
+      #away-table3 td {
+        width: calc(100% / 6);
+        border: 1px solid #444444;
+        padding: 10px;
+        font-size: 18px;
+      }
+
+      #home-table1 th,#home-table2 th,#home-table3 th,
+      #away-table1 th,
+      #away-table2 th,
+      #away-table3 th {
+        background-color: #ffffff;
+      }
+
+      #home-table1 tbody tr:nth-child(odd),#home-table2 tbody tr:nth-child(odd),#home-table3 tbody tr:nth-child(odd),
+      #away-table1 tbody tr:nth-child(odd),
+      #away-table2 tbody tr:nth-child(odd),
+      #away-table3 tbody tr:nth-child(odd) {
+        background-color: #d4d4d4;
+      }
+
+      #home-table1 tbody tr:nth-child(even),#home-table2 tbody tr:nth-child(even),#home-table3 tbody tr:nth-child(even),
+      #away-table1 tbody tr:nth-child(even),#away-table2 tbody tr:nth-child(even),#away-table3 tbody tr:nth-child(even)  {
+        background-color: #ffffff;
+      }
+      .frame {
+        background-color: whitesmoke
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-169-13">
+      <section class="frame-parent">
+        <div class="vector-parent" onclick="window.location.href='../prediction'">
+          <img class="frame-child" alt="" src="../static/img/rectangle-2245.svg" />
+
+          <img
+            class="frame-item"
+            loading="lazy"
+            alt=""
+            src="../static/img/group-7851@2x.png"
+          />
+
+          <div class="wrapper">
+            <h3 class="h3">이전 페이지</h3>
+          </div>
+        </div>
+        <header class="frame-group">
+          <div class="home-team-box-scores-wrapper">
+          </div>
+          <div class="frame1">
+            <table id="game-schedule-table" class="table">
+              <thead>
+                <!-- 테이블 헤더가 동적으로 생성됩니다 -->
+              </thead>
+              <tbody>
+                <!-- 데이터가 동적으로 여기에 삽입됩니다 -->
+              </tbody>
+            </table>
+          </div>
+          <div class="vector-group" onclick="window.location.href='/'">
+            <img class="frame-inner" alt="" src="../static/img/rectangle-2245.svg" />
+
+            <img
+              class="group-icon"
+              loading="lazy"
+              alt=""
+              src="../static/img/group-7851@2x.png"
+            />
+
+            <div class="container">
+              <h3 class="h31">메인 화면</h3>
+            </div>
+          </div>
+        </header>
+      </section>
+      <section class="slide-169-13-inner">
+        <div class="frame-container">
+          <div class="ellipse-wrapper">
+            <div class="ellipse-div"></div>
+          </div>
+          <div class="frame-div">
+            <div class="model-1-wrapper">
+              <div class="model-1">Model 1</div>
+            </div>
+            <div class="scoreboard-parent">
+              <div class="scoreboard">
+                <div class="rectangle-parent">
+                  <h1 class="home-team-box">Home Team Box Scores</h1>
+                  <div class="rectangle-div" style="display: inline-block; height: 400px;padding-top:40px">
+
+                    <div class="frame" style="padding:0;0;0;0">
+                      <table id="home-table1" class="table">
+                        <thead>
+                          <tr>
+                            <th>FGM</th>
+                            <th>FGA</th>
+                            <th>FG%</th>
+                            <th>3PM</th>
+                            <th>3PA</th>
+                            <th>3P%</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table id="home-table2" class="table"> 
+                        <thead>
+                          <tr>
+                            <th>FTM</th>
+                            <th>FTA</th>
+                            <th>FT%</th>
+                            <th>OREB</th>
+                            <th>DREB</th>
+                            <th>REB</th>
+                          </tr>
+                        </thead> 
+                        <tbody>
+                          <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table id="home-table3" class="table">
+                        <thead>
+                          <tr>
+                            <th>AST</th>
+                            <th>STL</th>
+                            <th>BLK</th>
+                            <th>TO</th>
+                            <th>PF</th>
+                            <th>PTS</th>
+                          </tr>
+                        </thead> 
+                        <tbody>
+                          <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="scoreboard-inner">
+                  <div class="values-wrapper">
+                    <div class="values">
+                      <div class="frame-parent1">
+                        <div class="frame-parent2">
+                          <div class="ellipse-container">
+                            <div class="frame-child1"></div>
+                          </div>
+                          <h2 class="h2 model1">(값)</h2>
+                        </div>
+                        <div class="frame-parent3">
+                          <div class="polygon-wrapper">
+                            <img
+                              class="polygon-icon"
+                              loading="lazy"
+                              alt=""
+                              src="../static/img/polygon-1.svg"
+                            />
+                          </div>
+                          <h2 class="h21 model2">(값)</h2>
+                        </div>
+                        <div class="frame-parent4">
+                          <div class="rectangle-wrapper">
+                            <div class="frame-child2"></div>
+                          </div>
+                          <h2 class="h22 model3">(값)</h2>
+                        </div>
+                      </div>
+                      <div class="frame-parent5">
+                        <div class="frame-parent6">
+                          <div class="ellipse-frame">
+                            <div class="frame-child3"></div>
+                          </div>
+                          <h2 class="h23 model4">(값)</h2>
+                        </div>
+                        <div class="frame-parent7">
+                          <div class="polygon-container">
+                            <img
+                              class="frame-child4"
+                              loading="lazy"
+                              alt=""
+                              src="../static/img/polygon-1.svg"
+                            />
+                          </div>
+                          <h2 class="h24 model5">(값)</h2>
+                        </div>
+                        <div class="frame-parent8">
+                          <div class="rectangle-container">
+                            <div class="frame-child5"></div>
+                          </div>
+                          <h2 class="h25 model6">(값)</h2>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="rectangle-group">
+                  <div class="frame-child6"></div>
+                  <div class="wrapper1" style="padding: 0;0;0;0;width:500px;height:100px;background-color:var(--color-whitesmoke);">
+                    <div class="rectangle-div" style="display: inline-block; height: 400px; width: 100%;padding-top:50px">
+
+                      <div class="frame" style="padding:0;0;0;0">
+                        <table id="away-table1" class="table">
+                          <thead>
+                            <tr>
+                              <th>FGM</th>
+                              <th>FGA</th>
+                              <th>FG%</th>
+                              <th>3PM</th>
+                              <th>3PA</th>
+                              <th>3P%</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table id="away-table2" class="table"> 
+                          <thead>
+                            <tr>
+                              <th>FTM</th>
+                              <th>FTA</th>
+                              <th>FT%</th>
+                              <th>OREB</th>
+                              <th>DREB</th>
+                              <th>REB</th>
+                            </tr>
+                          </thead> 
+                          <tbody>
+                            <tr>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table id="away-table3" class="table">
+                          <thead>
+                            <tr>
+                              <th>AST</th>
+                              <th>STL</th>
+                              <th>BLK</th>
+                              <th>TO</th>
+                              <th>PF</th>
+                              <th>PTS</th>
+                            </tr>
+                          </thead> 
+                          <tbody>
+                            <tr>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                              <td>0</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <h1 class="away-team-box">Away Team Box Scores</h1>
+                </div>
+              </div>
+              <div class="shapes-wrapper">
+                <div class="shapes">
+                  <img
+                    class="shapes-child"
+                    loading="lazy"
+                    alt=""
+                    src="../static/img/polygon-1.svg"
+                  />
+
+                  <div class="model-2-wrapper">
+                    <div class="model-2">Model 2</div>
+                  </div>
+                  <div class="shape-data">
+                    <div class="shape-data-child"></div>
+                  </div>
+                  <div class="shape-data1">
+                    <div class="model-3">Model 3</div>
+                  </div>
+                  <div class="shape-data2">
+                    <div class="shape-data-item"></div>
+                  </div>
+                  <div class="model-4-wrapper">
+                    <div class="model-4">Model 4</div>
+                  </div>
+                  <img
+                    class="shapes-item"
+                    loading="lazy"
+                    alt=""
+                    src="../static/img/polygon-1.svg"
+                  />
+
+                  <div class="shape-data3">
+                    <div class="model-5">Model 5</div>
+                  </div>
+                  <div class="shape-data4">
+                    <div class="shape-data-inner"></div>
+                  </div>
+                  <div class="model-6">Model 6</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
 </html>

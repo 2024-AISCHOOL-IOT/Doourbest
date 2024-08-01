@@ -1,0 +1,44 @@
+function fetchMatchResult(homeTeam, awayTeam) {
+    $.ajax({
+      url: "/api/prediction/real_time",
+      method: "GET",
+      data: { home_team: homeTeam, away_team: awayTeam },
+      success: function(data) {
+        $(".team_names").text(data.matchup); // 경기 이름 업데이트
+        $(".team_scores").text(data.score); // 경기 점수 업데이트
+  
+        // 홈팀과 원정팀의 박스 점수를 테이블에 표시
+        var homeTable = $('.home-table');
+        var awayTable = $('.away-table');
+        homeTable.empty(); // 기존 홈팀 테이블 데이터 제거
+        awayTable.empty(); // 기존 원정팀 테이블 데이터 제거
+  
+        var headers = data.columns;
+        var headerRow = '<tr>';
+        headers.forEach(function(header) {
+          headerRow += '<th>' + header + '</th>';
+        });
+        headerRow += '</tr>';
+        homeTable.append(headerRow);
+        awayTable.append(headerRow);
+  
+        var homeData = data.result_home[0]; // 첫 번째 레코드 가져오기
+        var awayData = data.result_away[0];
+  
+        var homeRow = '<tr>';
+        var awayRow = '<tr>';
+        headers.forEach(function(header) {
+          homeRow += '<td>' + homeData[header] + '</td>';
+          awayRow += '<td>' + awayData[header] + '</td>';
+        });
+        homeRow += '</tr>';
+        awayRow += '</tr>';
+        homeTable.append(homeRow);
+        awayTable.append(awayRow);
+      },
+      error: function(xhr, status, error) {
+        console.error("Error fetching match result:", error);
+      }
+    });
+  }
+  
