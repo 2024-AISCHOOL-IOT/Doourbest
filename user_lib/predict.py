@@ -1,9 +1,9 @@
-from user_lib.preprocessing import return_dict as rd
+import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier # knn 분류 모델
 from sklearn.tree import DecisionTreeClassifier # tree 분류 모델
 from sklearn.ensemble import RandomForestClassifier # rf 분류 모델
 
-merged_df = rd()
+merged_df = pd.read_csv('./refined.csv',encoding='utf-8')
 home_df = merged_df[['BLK_home', 'DREB_home', 'FG3_PCT_home', 'FG_PCT_home', 'FT_PCT_home', 'STL_home', 'TO_home']]
 away_df = merged_df[['BLK_away', 'DREB_away', 'FG3_PCT_away', 'FG_PCT_away', 'FT_PCT_away', 'STL_away', 'TO_away']]
 
