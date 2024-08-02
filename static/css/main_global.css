@@ -1,0 +1,69 @@
+body {
+  margin: 0;
+  line-height: normal;
+}
+
+:root {
+  /* fonts */
+  --font-inter: Inter;
+
+  /* font sizes */
+  --font-size-17xl: 36px;
+  --font-size-3xl: 22px;
+  --font-size-10xl: 29px;
+
+  /* Colors */
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* Gaps */
+  --gap-12xs-2: 0.2px;
+
+  /* Paddings */
+  --padding-6xl: 25px;
+  --padding-base: 16px;
+  --padding-4xl-8: 23.8px;
+  --padding-12xl: 31px;
+  --padding-7xs: 6px;
+
+  /* Border radiuses */
+  --br-147xl: 166px;
+
+  
+}
+.table-container {
+  overflow-x: auto;
+  margin: 0 auto;
+  width: calc(100% - 40px); /* wrapper보다 약간 작게 조정 */
+  background-color: #e0e0e0; /* 테이블 배경색 */
+  border-radius: 8px; /* 둥근 모서리 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th, .table td {
+  border: 1px solid #ddd; /* 회색 테두리 */
+  padding: 12px; /* 패딩 추가 */
+  text-align: left;
+}
+
+.table th {
+  background-color: #f9f9f9; /* 헤더 배경색 */
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* 홀수 행 배경색 */
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1; /* 호버 시 배경색 */
+}
