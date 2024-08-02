@@ -1,0 +1,276 @@
+.icon {
+    width: 1024px;
+    height: 100%;
+    position: absolute;
+    margin: 0 !important;
+    top: 0;
+    bottom: 0;
+    left: calc(50% - 512px);
+    max-height: 100%;
+    object-fit: cover;
+  }
+  .frame-child {
+    height: 111.3px;
+    width: 311.2px;
+    position: relative;
+    border-radius: var(--br-147xl);
+    display: none;
+  }
+  .b,
+  .frame-item {
+    position: relative;
+    z-index: 1;
+  }
+  .frame-item {
+    height: 62.5px;
+    width: 62.5px;
+    object-fit: cover;
+  }
+  .b {
+    align-self: stretch;
+  }
+  .wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--padding-7xs) 0 0;
+  }
+  .frame-inner,
+  .vector-parent {
+    width: 311.2px;
+    border-radius: var(--br-147xl);
+  }
+  .vector-parent {
+    box-shadow: 0 94px 26px transparent, 0 60px 24px rgba(0, 0, 0, 0.01),
+      0 34px 20px rgba(0, 0, 0, 0.05), 0 15px 15px rgba(0, 0, 0, 0.09),
+      0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-white);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--padding-6xl) var(--padding-base) var(--padding-4xl-8)
+      var(--padding-12xl);
+    box-sizing: border-box;
+    gap: var(--gap-12xs-2);
+    z-index: 1;
+  }
+  .frame-inner {
+    height: 111.3px;
+    position: relative;
+    display: none;
+  }
+  .b1,
+  .group-icon {
+    position: relative;
+    z-index: 1;
+  }
+  .group-icon {
+    height: 62.5px;
+    width: 62.5px;
+    object-fit: cover;
+  }
+  .b1 {
+    align-self: stretch;
+  }
+  .container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--padding-7xs) 0 0;
+  }
+  .rectangle-icon,
+  .vector-group {
+    width: 311.2px;
+    border-radius: var(--br-147xl);
+  }
+  .vector-group {
+    box-shadow: 0 94px 26px transparent, 0 60px 24px rgba(0, 0, 0, 0.01),
+      0 34px 20px rgba(0, 0, 0, 0.05), 0 15px 15px rgba(0, 0, 0, 0.09),
+      0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-white);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--padding-6xl) var(--padding-base) var(--padding-4xl-8)
+      var(--padding-12xl);
+    box-sizing: border-box;
+    gap: var(--gap-12xs-2);
+    z-index: 1;
+  }
+  .rectangle-icon {
+    height: 111.3px;
+    position: relative;
+    display: none;
+  }
+  .b2,
+  .frame-child1 {
+    position: relative;
+    z-index: 1;
+  }
+  .frame-child1 {
+    height: 62.5px;
+    width: 62.5px;
+    object-fit: cover;
+  }
+  .b2 {
+    align-self: stretch;
+  }
+  .frame {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 5px 0 0;
+  }
+  .frame-child2,
+  .vector-container {
+    width: 311.2px;
+    border-radius: var(--br-147xl);
+  }
+  .vector-container {
+    box-shadow: 0 152px 43px transparent, 0 97px 39px rgba(0, 0, 0, 0.01),
+      0 55px 33px rgba(0, 0, 0, 0.05), 0 24px 24px rgba(0, 0, 0, 0.09),
+      0 6px 13px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-white);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 25.5px var(--padding-base) 23.3px var(--padding-12xl);
+    box-sizing: border-box;
+    gap: var(--gap-12xs-2);
+    z-index: 1;
+  }
+  .frame-child2 {
+    height: 111.3px;
+    position: relative;
+    display: none;
+  }
+  .b3,
+  .frame-child3 {
+    position: relative;
+    z-index: 1;
+  }
+  .frame-child3 {
+    height: 62.5px;
+    width: 62.5px;
+    object-fit: cover;
+  }
+  .b3 {
+    align-self: stretch;
+  }
+  .frame-div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--padding-7xs) 0 0;
+  }
+  .frame-child4,
+  .group-div {
+    width: 311.2px;
+    border-radius: var(--br-147xl);
+  }
+  .group-div {
+    box-shadow: 0 275px 77px transparent, 0 176px 70px rgba(0, 0, 0, 0.01),
+      0 99px 59px rgba(0, 0, 0, 0.05), 0 44px 44px rgba(0, 0, 0, 0.09),
+      0 11px 24px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-white);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--padding-6xl) var(--padding-base) var(--padding-4xl-8)
+      var(--padding-12xl);
+    box-sizing: border-box;
+    gap: var(--gap-12xs-2);
+    z-index: 1;
+  }
+  .frame-child4 {
+    height: 111.3px;
+    position: relative;
+    display: none;
+  }
+  .b4,
+  .frame-child5 {
+    position: relative;
+    z-index: 1;
+  }
+  .frame-child5 {
+    height: 62.5px;
+    width: 62.5px;
+    object-fit: cover;
+  }
+  .b4 {
+    align-self: stretch;
+  }
+  .wrapper1 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--padding-7xs) 0 0;
+  }
+  .slide-169-12,
+  .vector-parent1 {
+    background-color: var(--color-white);
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+  .vector-parent1 {
+    width: 311.2px;
+    box-shadow: 0 275px 77px transparent, 0 176px 70px rgba(0, 0, 0, 0.01),
+      0 99px 59px rgba(0, 0, 0, 0.05), 0 44px 44px rgba(0, 0, 0, 0.09),
+      0 11px 24px rgba(0, 0, 0, 0.1);
+    border-radius: var(--br-147xl);
+    flex-direction: row;
+    align-items: flex-start;
+    padding: var(--padding-6xl) var(--padding-base) var(--padding-4xl-8)
+      var(--padding-12xl);
+    gap: var(--gap-12xs-2);
+    z-index: 1;
+  }
+  .slide-169-12 {
+    width: 100%;
+    height: 1024px;
+    position: relative;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
+    padding: 174px 20px 173.7px;
+    gap: 29.9px;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    font-size: var(--font-size-17xl);
+    color: var(--color-black);
+    font-family: var(--font-inter);
+  }
+  @media screen and (max-width: 767px) {
+    .b,
+    .b1,
+    .b2,
+    .b3,
+    .b4 {
+      font-size: var(--font-size-10xl);
+    }
+  }
+  @media screen and (max-width: 450px) {
+    .b,
+    .b1,
+    .b2,
+    .b3,
+    .b4 {
+      font-size: var(--font-size-3xl);
+    }
+  }

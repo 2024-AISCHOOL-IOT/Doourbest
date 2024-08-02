@@ -3,7 +3,7 @@ from sklearn.neighbors import KNeighborsClassifier # knn 분류 모델
 from sklearn.tree import DecisionTreeClassifier # tree 분류 모델
 from sklearn.ensemble import RandomForestClassifier # rf 분류 모델
 
-merged_df = pd.read_csv('./refined.csv',encoding='utf-8')
+merged_df = pd.read_csv('./data/refined.csv',encoding='utf-8')
 home_df = merged_df[['BLK_home', 'DREB_home', 'FG3_PCT_home', 'FG_PCT_home', 'FT_PCT_home', 'STL_home', 'TO_home']]
 away_df = merged_df[['BLK_away', 'DREB_away', 'FG3_PCT_away', 'FG_PCT_away', 'FT_PCT_away', 'STL_away', 'TO_away']]
 
@@ -29,7 +29,7 @@ def pre_knn(X):
         결과 값은 홈팀의 우승여부
         '''              
         if X is not None and _knn_model is not None:
-                return _knn_model.predict(X)
+                return _knn_model.predict(X)[0]
         else:
                 print("정상적인데이터를 넣어주세요")
                 return X
@@ -42,7 +42,7 @@ def pre_tree(X):
         결과 값은 홈팀의 우승여부
         '''
         if X is not None and _tree_model is not None:
-                return _tree_model.predict(X)
+                return _tree_model.predict(X)[0]
         else:
                 print("정상적인데이터를 넣어주세요")
                 return X
@@ -55,7 +55,7 @@ def pre_rf(X):
         결과 값은 홈팀의 우승여부
         '''
         if X is not None and _rf_model is not None:
-                return _rf_model.predict(X)
+                return _rf_model.predict(X)[0]
         else:
                 print("정상적인데이터를 넣어주세요")
                 return X

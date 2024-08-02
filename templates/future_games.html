@@ -1,11 +1,290 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <link rel="stylesheet" href="../static/css/prediction_global2.css" />
+    <link rel="stylesheet" href="../static/css/prediction_index2.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto Sans KR:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" />
+    <style>
+
+      #home-team-logo,
+      #away-team-logo {
+        transition: transform 1.5s ease-in-out; /* 추가된 부분 */
+      }
+     
+      .vector-parent,
+      .vector-group,
+      .vector-container,
+      .group-div,
+      .vector-parent1 {
+        cursor: pointer; /* 클릭 가능한 느낌을 주기 위해 커서 모양 변경 */
+        padding: 20px;
+        background-color: white;
+        text-align: center;
+      }
+      
+      .vector-parent:hover,
+      .vector-group:hover,
+      .vector-container:hover,
+      .group-div:hover,
+      .vector-parent1:hover{
+        background-color: lightgray; /* 마우스 오버 시 배경색 변경 */
+      }
+    </style>
 </head>
 <body>
-    <br><input type="button" value="홈" onclick="window.location.href='/'">
-</body>
+    <div class="slide-169-6">
+        <img class="icon" alt="" src="../static/img/46352221-1@2x.png" />
+        <section class="slide-169-6-inner">
+            <div class="frame-parent">
+                <div class="rectangle-parent">
+                    <div class="frame-child"></div>
+                    <div class="div" id="home-team-logo"></div>
+                </div>
+                <div class="frame-wrapper">
+                    <div class="vector-parent" onclick="window.location.href='/'">
+                        <img class="frame-item" alt="" src="../static/img/rectangle-2245.svg" />
+                        <img class="frame-inner" loading="lazy" alt="" src="../static/img/group-7851@2x.png" />
+                        <div class="wrapper">
+                            <b class="b">메인 화면</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="rectangle-group">
+                    <div class="rectangle-div"></div>
+                    <div class="div1" id="away-team-logo"></div>
+                </div>
+            </div>
+        </section>
+        <section class="frame-group">
+            <div class="vector-group">
+                <img class="rectangle-icon" alt="" src="../static/img/rectangle-2245.svg" />
+                <img class="group-icon" alt="" src="../static/img/group-7851@2x.png" />
+                <div class="container">
+                    <b class="b1">홈팀 선택</b>
+                </div>
+                <ul id="home-team-list" class="scrollable-list" style="display: none;">
+                    <!-- 팀 목록 1-10 -->
+                    <li data-team="Atlanta Hawks" data-img="../static/img/teams/Atlanta Hawks.svg">Atlanta Hawks</li>
+                    <li data-team="Boston Celtics" data-img="../static/img/teams/Boston Celtics.svg">Boston Celtics</li>
+                    <li data-team="Brooklyn Nets" data-img="../static/img/teams/Brooklyn Nets.svg">Brooklyn Nets</li>
+                    <li data-team="Charlotte Hornets" data-img="../static/img/teams/Charlotte Hornets.svg">Charlotte Hornets</li>
+                    <li data-team="Chicago Bulls" data-img="../static/img/teams/Chicago Bulls.svg">Chicago Bulls</li>
+                    <li data-team="Cleveland Cavaliers" data-img="../static/img/teams/Cleveland Cavaliers.svg">Cleveland Cavaliers</li>
+                    <li data-team="Dallas Mavericks" data-img="../static/img/teams/Dallas Mavericks.svg">Dallas Mavericks</li>
+                    <li data-team="Denver Nuggets" data-img="../static/img/teams/Denver Nuggets.svg">Denver Nuggets</li>
+                    <li data-team="Detroit Pistons" data-img="../static/img/teams/Detroit Pistons.svg">Detroit Pistons</li>
+                    <li data-team="Golden State Warriors" data-img="../static/img/teams/Golden State Warriors.svg">Golden State Warriors</li>
+                    <!-- 팀 목록 11-20 -->
+                    <li data-team="Houston Rockets" data-img="../static/img/teams/Houston Rockets.svg">Houston Rockets</li>
+                    <li data-team="Indiana Pacers" data-img="../static/img/teams/Indiana Pacers.svg">Indiana Pacers</li>
+                    <li data-team="Los Angeles Clippers" data-img="../static/img/teams/Los Angeles Clippers.svg">Los Angeles Clippers</li>
+                    <li data-team="Los Angeles Lakers" data-img="../static/img/teams/Los Angeles Lakers.svg">Los Angeles Lakers</li>
+                    <li data-team="Memphis Grizzlies" data-img="../static/img/teams/Memphis Grizzlies.svg">Memphis Grizzlies</li>
+                    <li data-team="Miami Heat" data-img="../static/img/teams/Miami Heat.svg">Miami Heat</li>
+                    <li data-team="Milwaukee Bucks" data-img="../static/img/teams/Milwaukee Bucks.svg">Milwaukee Bucks</li>
+                    <li data-team="Minnesota Timberwolves" data-img="../static/img/teams/Minnesota Timberwolves.svg">Minnesota Timberwolves</li>
+                    <li data-team="New Orleans Pelicans" data-img="../static/img/teams/New Orleans Pelicans.svg">New Orleans Pelicans</li>
+                    <li data-team="New York Knicks" data-img="../static/img/teams/New York Knicks.svg">New York Knicks</li>
+                    <!-- 팀 목록 21-30 -->
+                    <li data-team="Oklahoma City Thunder" data-img="../static/img/teams/Oklahoma City Thunder.svg">Oklahoma City Thunder</li>
+                    <li data-team="Orlando Magic" data-img="../static/img/teams/Orlando Magic.svg">Orlando Magic</li>
+                    <li data-team="Philadelphia 76ers" data-img="../static/img/teams/Philadelphia 76ers.svg">Philadelphia 76ers</li>
+                    <li data-team="Phoenix Suns" data-img="../static/img/teams/Phoenix Suns.svg">Phoenix Suns</li>
+                    <li data-team="Portland Trail Blazers" data-img="../static/img/teams/Portland Trail Blazers.svg">Portland Trail Blazers</li>
+                    <li data-team="Sacramento Kings" data-img="../static/img/teams/Sacramento Kings.svg">Sacramento Kings</li>
+                    <li data-team="San Antonio Spurs" data-img="../static/img/teams/San Antonio Spurs.svg">San Antonio Spurs</li>
+                    <li data-team="Toronto Raptors" data-img="../static/img/teams/Toronto Raptors.svg">Toronto Raptors</li>
+                    <li data-team="Utah Jazz" data-img="../static/img/teams/Utah Jazz.svg">Utah Jazz</li>
+                    <li data-team="Washington Wizards" data-img="../static/img/teams/Washington Wizards.svg">Washington Wizards</li>
+                </ul>
+            </div>
+            <div class="frame-container">
+                <div class="vector-container" onclick="window.location.href='../prediction'">
+                    <img class="frame-child1" alt="" src="../static/img/rectangle-2245.svg" />
+                    <img class="frame-child2" alt="" src="../static/img/group-7851@2x.png" />
+                    <div class="frame">
+                        <b class="b2">이전 페이지</b>
+                    </div>
+                </div>
+            </div>
+            <div class="group-div">
+                <img class="frame-child3" alt="" src="../static/img/rectangle-2245.svg" />
+                <img class="frame-child4" alt="" src="../static/img/group-7851@2x.png" />
+                <div class="frame-div">
+                    <b class="b3">원정팀 선택</b>
+                </div>
+                <ul id="away-team-list" class="scrollable-list" style="display: none;">
+                    <!-- 팀 목록 1-10 -->
+                    <li data-team="Atlanta Hawks" data-img="../static/img/teams/Atlanta Hawks.svg">Atlanta Hawks</li>
+                    <li data-team="Boston Celtics" data-img="../static/img/teams/Boston Celtics.svg">Boston Celtics</li>
+                    <li data-team="Brooklyn Nets" data-img="../static/img/teams/Brooklyn Nets.svg">Brooklyn Nets</li>
+                    <li data-team="Charlotte Hornets" data-img="../static/img/teams/Charlotte Hornets.svg">Charlotte Hornets</li>
+                    <li data-team="Chicago Bulls" data-img="../static/img/teams/Chicago Bulls.svg">Chicago Bulls</li>
+                    <li data-team="Cleveland Cavaliers" data-img="../static/img/teams/Cleveland Cavaliers.svg">Cleveland Cavaliers</li>
+                    <li data-team="Dallas Mavericks" data-img="../static/img/teams/Dallas Mavericks.svg">Dallas Mavericks</li>
+                    <li data-team="Denver Nuggets" data-img="../static/img/teams/Denver Nuggets.svg">Denver Nuggets</li>
+                    <li data-team="Detroit Pistons" data-img="../static/img/teams/Detroit Pistons.svg">Detroit Pistons</li>
+                    <li data-team="Golden State Warriors" data-img="../static/img/teams/Golden
+                    <li data-team="Golden State Warriors" data-img="../static/img/teams/Golden State Warriors.svg">Golden State Warriors</li>
+                    <!-- 팀 목록 11-20 -->
+                    <li data-team="Houston Rockets" data-img="../static/img/teams/Houston Rockets.svg">Houston Rockets</li>
+                    <li data-team="Indiana Pacers" data-img="../static/img/teams/Indiana Pacers.svg">Indiana Pacers</li>
+                    <li data-team="Los Angeles Clippers" data-img="../static/img/teams/Los Angeles Clippers.svg">Los Angeles Clippers</li>
+                    <li data-team="Los Angeles Lakers" data-img="../static/img/teams/Los Angeles Lakers.svg">Los Angeles Lakers</li>
+                    <li data-team="Memphis Grizzlies" data-img="../static/img/teams/Memphis Grizzlies.svg">Memphis Grizzlies</li>
+                    <li data-team="Miami Heat" data-img="../static/img/teams/Miami Heat.svg">Miami Heat</li>
+                    <li data-team="Milwaukee Bucks" data-img="../static/img/teams/Milwaukee Bucks.svg">Milwaukee Bucks</li>
+                    <li data-team="Minnesota Timberwolves" data-img="../static/img/teams/Minnesota Timberwolves.svg">Minnesota Timberwolves</li>
+                    <li data-team="New Orleans Pelicans" data-img="../static/img/teams/New Orleans Pelicans.svg">New Orleans Pelicans</li>
+                    <li data-team="New York Knicks" data-img="../static/img/teams/New York Knicks.svg">New York Knicks</li>
+                    <!-- 팀 목록 21-30 -->
+                    <li data-team="Oklahoma City Thunder" data-img="../static/img/teams/Oklahoma City Thunder.svg">Oklahoma City Thunder</li>
+                    <li data-team="Orlando Magic" data-img="../static/img/teams/Orlando Magic.svg">Orlando Magic</li>
+                    <li data-team="Philadelphia 76ers" data-img="../static/img/teams/Philadelphia 76ers.svg">Philadelphia 76ers</li>
+                    <li data-team="Phoenix Suns" data-img="../static/img/teams/Phoenix Suns.svg">Phoenix Suns</li>
+                    <li data-team="Portland Trail Blazers" data-img="../static/img/teams/Portland Trail Blazers.svg">Portland Trail Blazers</li>
+                    <li data-team="Sacramento Kings" data-img="../static/img/teams/Sacramento Kings.svg">Sacramento Kings</li>
+                    <li data-team="San Antonio Spurs" data-img="../static/img/teams/San Antonio Spurs.svg">San Antonio Spurs</li>
+                    <li data-team="Toronto Raptors" data-img="../static/img/teams/Toronto Raptors.svg">Toronto Raptors</li>
+                    <li data-team="Utah Jazz" data-img="../static/img/teams/Utah Jazz.svg">Utah Jazz</li>
+                    <li data-team="Washington Wizards" data-img="../static/img/teams/Washington Wizards.svg">Washington Wizards</li>
+                </ul>
+            </div>
+        </section>
+        <div class="slide-169-6-child">
+            <div class="vector-parent1 vector-parent vector-group">
+                <img class="frame-child5" alt="" src="../static/img/rectangle-2245.svg" />
+                <img class="frame-child6" alt="" src="../static/img/group-7851@2x.png" />
+                <div class="wrapper1">
+                    <b class="b4">예측</b>
+                </div>
+                <ul id="model-list" class="scrollable-list" style="display: none;">
+                    <!-- 팀 목록 1-10 -->
+                    <li data-model="model1" >model1</li>
+                    <li data-model="model2" >model2</li>
+                    <li data-model="model3" >model3</li>
+                    <li data-model="model4" >model4</li>
+                    <li data-model="model5" >model5</li>
+                    <li data-model="model6" >model6</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+          const vectorGroup = document.querySelector(".vector-group");
+          const homeTeamList = document.getElementById("home-team-list");
+          const homeTeamLogo = document.getElementById("home-team-logo");
+          const groupDiv = document.querySelector(".group-div");
+          const awayTeamList = document.getElementById("away-team-list");
+          const awayTeamLogo = document.getElementById("away-team-logo");
+          const modelList = document.getElementById("model-list");
+          const predictionButton = document.querySelector('.vector-parent1'); // 수정된 부분
+          let selectedHomeTeam = null;
+          let selectedAwayTeam = null;
+          let selectedModel = null;
+
+          // 홈 팀 선택 영역 클릭 시 리스트 표시/숨기기
+          vectorGroup.addEventListener("click", () => {
+              homeTeamList.style.display = homeTeamList.style.display === "none" || homeTeamList.style.display === "" ? "block" : "none";
+              awayTeamList.style.display = "none"; // 원정팀 리스트는 숨기기
+              modelList.style.display = "none"; // 모델 리스트는 숨기기
+
+              // 로고 크기 원상복귀
+              homeTeamLogo.style.transform = "scale(1)";
+              awayTeamLogo.style.transform = "scale(1)";
+          });
+
+          // 어웨이 팀 선택 영역 클릭 시 리스트 표시/숨기기
+          groupDiv.addEventListener("click", () => {
+              awayTeamList.style.display = awayTeamList.style.display === "none" || awayTeamList.style.display === "" ? "block" : "none";
+              homeTeamList.style.display = "none"; // 홈팀 리스트는 숨기기
+              modelList.style.display = "none"; // 모델 리스트는 숨기기
+
+               // 로고 크기 원상복귀
+              homeTeamLogo.style.transform = "scale(1)";
+              awayTeamLogo.style.transform = "scale(1)";
+          });
+
+          // 홈 팀 리스트에서 팀 선택 시 로고 변경 및 리스트 숨기기
+          homeTeamList.addEventListener("click", (event) => {
+              if (event.target.tagName === "LI") {
+                  const imgPath = event.target.getAttribute("data-img");
+                  selectedHomeTeam = event.target.getAttribute("data-team");
+                  homeTeamLogo.innerHTML = `<img src="${imgPath}" alt="팀 로고" style="width: auto; height: auto;">`;
+                  homeTeamList.style.display = "none"; // 리스트 숨기기
+              }
+          });
+
+          // 어웨이 팀 리스트에서 팀 선택 시 로고 변경 및 리스트 숨기기
+          awayTeamList.addEventListener("click", (event) => {
+              if (event.target.tagName === "LI") {
+                  const imgPath = event.target.getAttribute("data-img");
+                  selectedAwayTeam = event.target.getAttribute("data-team");
+                  awayTeamLogo.innerHTML = `<img src="${imgPath}" alt="팀 로고" style="width: auto; height: auto;">`;
+                  awayTeamList.style.display = "none"; // 리스트 숨기기
+              }
+          });
+
+          // 클릭 시 모든 리스트 숨기기 (리스트 외 영역 클릭 시)
+          document.addEventListener("click", (event) => {
+              if (!event.target.closest('.vector-group') && !event.target.closest('.group-div')) {
+                  homeTeamList.style.display = 'none';
+                  awayTeamList.style.display = 'none';
+                  modelList.style.display = "none";
+
+                  homeTeamLogo.style.transform = "scale(1)";
+                  awayTeamLogo.style.transform = "scale(1)";
+              }
+          });
+
+          modelList.addEventListener("click", (event) => {
+              // 기존 크기로 초기화
+              homeTeamLogo.style.transform = "scale(1)";
+              awayTeamLogo.style.transform = "scale(1)";
+
+              selectedModel = event.target.getAttribute("data-model");
+    
+              if (!selectedHomeTeam || !selectedAwayTeam) {
+                  alert('두 팀을 모두 선택해주세요.');
+              } else if (selectedHomeTeam === selectedAwayTeam) {
+                  alert('두 팀이 동일합니다. 다른 팀을 선택해주세요.');
+              } else {
+                  // GET 요청으로 변경
+                  const url = `/api/predict?home_team=${encodeURIComponent(selectedHomeTeam)}&away_team=${encodeURIComponent(selectedAwayTeam)}&model=${encodeURIComponent(selectedModel)}`;
+                  
+                  fetch(url, {
+                      method: 'GET',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      }
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      console.log(data.result); // 데이터 확인을 위한 디버그 출력
+                      // 결과를 받아와 로고 크기를 조정
+                      if (data.result === selectedHomeTeam) {
+                          homeTeamLogo.style.transform = "scale(1.5)";
+                          awayTeamLogo.style.transform = "scale(0.8)";
+                      } else {
+                          homeTeamLogo.style.transform = "scale(0.8)";
+                          awayTeamLogo.style.transform = "scale(1.5)";
+                      }
+                  })
+                  .catch(error => console.error('Error:', error));
+              }
+          })
+          // 예측 버튼 클릭 시
+          predictionButton.addEventListener('click', (event) => {
+            modelList.style.display = modelList.style.display === "none" || modelList.style.display === "" ? "block" : "none"; 
+            homeTeamList.style.display = 'none';
+            awayTeamList.style.display = 'none';
+          });
+      });
+
+    </script>
+  </body>
 </html>

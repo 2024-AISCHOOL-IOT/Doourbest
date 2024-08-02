@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Ranking</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function loadTableData() {
+                $.ajax({
+                    url: "/api/player_ranking",
+                    method: "GET",
+                    success: function(data) {
+                        var tableHead = $('#player-ranking-table thead');
+                        var tableBody = $('#player-ranking-table tbody');
+                        tableHead.empty(); // 기존 테이블 헤더 내용 제거
+                        tableBody.empty(); // 기존 테이블 내용 제거
+
+                        // 데이터로부터 테이블 헤더 생성
+                        var headers = data.columns;
+                        var headerRow = '<tr>';
+                        headers.forEach(function(header) {
+                            headerRow += '<th>' + header + '</th>';
+                        });
+                        headerRow += '</tr>';
+                        tableHead.append(headerRow);
+
+                        // 데이터로부터 테이블 행 생성
+                        data.data.forEach(function(row) {
+                            var tableRow = '<tr>';
+                            headers.forEach(function(header) {
+                                tableRow += '<td>' + row[header] + '</td>';
+                            });
+                            tableRow += '</tr>';
+                            tableBody.append(tableRow);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error loading data:", error);
+                    }
+                });
+            }
+
+            // 페이지가 로드될 때 테이블 데이터를 로드
+            loadTableData();
+
+            // 5초마다 테이블 데이터를 갱신
+            setInterval(loadTableData, 5000);
+        });
+    </script>
+    <style>
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto; /* 테이블 레이아웃 자동 조정 */
+        }
+        .table th, .table td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        .table-container {
+            overflow-x: auto; /* 테이블이 길어질 경우 스크롤 생성 */
+        }
+    </style>
+</head>
+<body>
+    <br><input type="button" value="홈" onclick="window.location.href='/'">
+    <br><input type="button" value="조회" onclick="window.location.href='../information'">
+
+    <h1>Player Ranking</h1>
+    <div class="table-container">
+        <table id="player-ranking-table" class="table">
+            <thead>
+                <!-- 테이블 헤더가 동적으로 생성됩니다 -->
+            </thead>
+            <tbody>
+                <!-- 데이터가 동적으로 여기에 삽입됩니다 -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

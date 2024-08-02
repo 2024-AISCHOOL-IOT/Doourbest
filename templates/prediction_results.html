@@ -1,11 +1,319 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <br><input type="button" value="홈" onclick="window.location.href='/'">
-</body>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+
+    <link rel="stylesheet" href="../static/css/resultsinquiry_global.css" />
+    <link rel="stylesheet" href="../static/css/resultsinquiry_index.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+    />
+    <style>
+      .vector-parent,
+      .vector-group {
+        cursor: pointer; /* 클릭 가능한 느낌을 주기 위해 커서 모양 변경 */
+        padding: 20px;
+        background-color: white;
+        text-align: center;
+      }
+
+      .vector-parent:hover,
+      .vector-group:hover {
+        background-color: lightgray; /* 마우스 오버 시 배경색 변경 */
+      }
+
+      .wrapper1 {
+        max-height: 300px; /* wrapper1의 최대 높이 설정 */
+        overflow: hidden; /* 스크롤을 허용하지 않도록 변경 */
+        font-size: 24px; /* 글씨 크기 조절 가능 부분 */
+        display: flex;
+        align-items: center; /* 수직 정렬 */
+        justify-content: center; /* 수평 정렬 */
+      }
+
+      .table-container {
+        width: 100%;
+        overflow: hidden; /* x축, y축 스크롤 불가 */
+      }
+
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px; /* 테이블과 다른 요소 사이에 여백 추가 */
+        font-size: 10px; /* 테이블 글씨 크기 조절 가능 부분 */
+        text-align: center;
+      }
+
+      .table th, .table td {
+        border: 1px solid #ffffff;
+        padding: 24px 10px; /* 패딩을 늘려 행 간격 조절 */
+        text-align: center;
+        font-size: 18px;
+      }
+
+      .table th {
+        background-color: #ffffff;
+      }
+
+      .table tbody tr:nth-child(odd) {
+        background-color: #d4d4d4;
+      }
+
+      .table tbody tr:nth-child(even) {
+        background-color: #ffffff;
+      }
+      /* 경기 팀 이름 및 점수 표시 영역의 글씨 크기 조절 */
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        function loadTableData() {
+          $.ajax({
+            url: "/api/game_schedule",
+            method: "GET",
+            success: function(data) {
+              var tableHead = $('#game-schedule-table thead');
+              var tableBody = $('#game-schedule-table tbody');
+              tableHead.empty(); // 기존 테이블 헤더 내용 제거
+              tableBody.empty(); // 기존 테이블 내용 제거
+
+              // 데이터로부터 테이블 헤더 생성
+              var headers = ['Matchup'];
+              var headerRow = '<tr>';
+              headers.forEach(function(header) {
+                headerRow += '<th>' + header + '</th>';
+              });
+              headerRow += '</tr>';
+              tableHead.append(headerRow);
+
+              // 데이터로부터 테이블 행 생성
+              data.data.forEach(function(row) {
+                var tableRow = '<tr>';
+                tableRow += '<td class="matchup-cell" data-home="' + row['homeTeam'] + '" data-away="' + row['awayTeam'] + '">' + row['homeTeam'] + ' vs ' + row['awayTeam'] + '</td>';
+                tableRow += '</tr>';
+                tableBody.append(tableRow);
+              });
+
+              // 경기 클릭 이벤트 추가
+              $('.matchup-cell').click(function() {
+                var homeTeam = $(this).data('home');
+                var awayTeam = $(this).data('away');
+                fetchMatchResult(homeTeam, awayTeam);
+              });
+            },
+            error: function(xhr, status, error) {
+              console.error("Error loading data:", error);
+            }
+          });
+        }
+
+        function fetchMatchResult(homeTeam, awayTeam) {
+          $.ajax({
+            url: "/api/get_match_result",
+            method: "GET",
+            data: { home_team: homeTeam, away_team: awayTeam },
+            success: function(data) {
+              for (i in data){
+                if (i.indexOf('model') > -1){
+                  console.log(data[i],typeof data[i])
+                  $("."+i).text(data[i] == "1" ? "H" : "A")
+                }
+              }
+              str_arr=data.matchup.split('vs')
+              $(".team_names > div:eq(0)").text(str_arr[0]); // 경기 팀 이름 갱신
+              $(".team_names > div:eq(2)").text(str_arr[1]); // 경기 팀 이름 갱신
+              $(".team_scores").text(data.score); // 경기 점수 갱신
+            },
+            error: function(xhr, status, error) {
+              console.error("Error fetching match result:", error);
+            }
+          });
+        }
+
+        // 페이지가 로드될 때 테이블 데이터를 로드
+        loadTableData();
+      });
+    </script>
+  </head>
+  <body>
+    <div class="slide-169-15">
+      <section class="frame-parent">
+        <div class="vector-parent" onclick="window.location.href='../information'">
+          <img class="frame-child" alt="" src="../static/img/rectangle-2245.svg" />
+          <img
+            class="frame-item"
+            loading="lazy"
+            alt=""
+            src="../static/img/group-7851@2x.png"
+          />
+          <div class="wrapper">
+            <h3 class="h3">이전 페이지</h3>
+          </div>
+        </div>
+        <header class="frame-group">
+          <div class="container">
+            <h1 class="h1">오늘의 경기 리스트</h1>
+          </div>
+          <div class="frame-container">
+            <div class="vector-group" onclick="window.location.href='/'">
+              <img
+                class="frame-inner"
+                alt=""
+                src="../static/img/rectangle-2245.svg"
+              />
+              <img
+                class="group-icon"
+                loading="lazy"
+                alt=""
+                src="../static/img/group-7851@2x.png"
+              />
+              <div class="frame">
+                <h3 class="h31">메인 화면</h3>
+              </div>
+            </div>
+            <div class="frame-div"></div>
+          </div>
+        </header>
+      </section>
+      <section class="slide-169-15-inner">
+        <div class="frame-parent1">
+          <div class="rectangle-parent">
+            <div class="rectangle-div"></div>
+            <div class="wrapper1">
+              <div class="table-container">
+                <table id="game-schedule-table" class="table">
+                  <thead>
+                    <!-- 테이블 헤더가 동적으로 생성됩니다 -->
+                  </thead>
+                  <tbody>
+                    <!-- 데이터가 동적으로 여기에 삽입됩니다 -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="frame-parent2">
+            <div class="frame-parent3">
+              <div class="match-model-image-wrapper">
+                <div class="match-model-image"></div>
+              </div>
+              <div class="model-1-wrapper">
+                <div class="model-1">Model 1</div>
+              </div>
+              <img
+                class="polygon-icon"
+                loading="lazy"
+                alt=""
+                src="../static/img/polygon-1.svg"
+              />
+              <div class="model-2-wrapper">
+                <div class="model-2">Model 2</div>
+              </div>
+            </div>
+            <div class="frame-parent4">
+              <div class="frame-wrapper">
+                <div class="rectangle-group">
+                  <div class="frame-child1"></div>
+                  <div class="wrapper2">
+                    <h1 class="team_names">
+                      <div>Home team</div>
+                      <div>vs</div>
+                      <div>Away team</div>
+                    </h1>
+                  </div>
+                  <div class="wrapper2">
+                    <h1 class="team_scores">(점수 : 점수)</h1>
+                  </div>
+                  <div class="frame-parent5">
+                    <div class="frame-parent6">
+                      <div class="frame-parent7">
+                        <div class="ellipse-wrapper">
+                          <div class="ellipse-div"></div>
+                        </div>
+                        <h2 class="h2 model1"></h2>
+                      </div>
+                      <div class="frame-parent8">
+                        <div class="polygon-wrapper">
+                          <img
+                            class="frame-child2"
+                            loading="lazy"
+                            alt=""
+                            src="../static/img/polygon-1.svg"
+                          />
+                        </div>
+                        <h2 class="h21 model2"></h2>
+                      </div>
+                      <div class="frame-parent9">
+                        <div class="rectangle-wrapper">
+                          <div class="frame-child3"></div>
+                        </div>
+                        <h2 class="h22 model3"></h2>
+                      </div>
+                    </div>
+                    <div class="frame-parent10">
+                      <div class="frame-parent11">
+                        <div class="ellipse-container">
+                          <div class="frame-child4"></div>
+                        </div>
+                        <h2 class="h23 model4"></h2>
+                      </div>
+                      <div class="frame-parent12">
+                        <div class="polygon-container">
+                          <img
+                            class="frame-child5"
+                            loading="lazy"
+                            alt=""
+                            src="../static/img/polygon-1.svg"
+                          />
+                        </div>
+                        <h2 class="h24 model5"></h2>
+                      </div>
+                      <div class="frame-parent13">
+                        <div class="rectangle-container">
+                          <div class="frame-child6"></div>
+                        </div>
+                        <h2 class="h25 model6"></h2>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="frame-parent14">
+                <div class="rectangle-frame">
+                  <div class="frame-child7"></div>
+                </div>
+                <div class="model-3-wrapper">
+                  <div class="model-3">Model 3</div>
+                </div>
+                <div class="ellipse-frame">
+                  <div class="frame-child8"></div>
+                </div>
+                <div class="model-4-wrapper">
+                  <div class="model-4">Model 4</div>
+                </div>
+                <img
+                  class="frame-child9"
+                  loading="lazy"
+                  alt=""
+                  src="../static/img/polygon-1.svg"
+                />
+                <div class="model-5-wrapper">
+                  <div class="model-5">Model 5</div>
+                </div>
+                <div class="rectangle-wrapper1">
+                  <div class="frame-child10"></div>
+                </div>
+                  <div class="model-6">Model 6</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
 </html>
+                
